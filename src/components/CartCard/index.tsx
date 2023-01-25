@@ -2,7 +2,7 @@ import { Trash } from 'phosphor-react'
 
 import { AmountCounter } from '../AmountCounter'
 
-import americano from '../../assets/coffeeImages/americano.svg'
+import { formatBRLCurrency } from '../../utils/formatters'
 
 import {
   CartCardContent,
@@ -11,23 +11,47 @@ import {
   CartCardWrapper,
 } from './styles'
 
-export function CartCard() {
+interface CartCardProps {
+  id: number
+  imgUrl: string
+  title: string
+  amount: number
+  price: number
+  onClickMinus: (itemId: number) => void
+  onClickPlus: (itemId: number) => void
+  onClickRemove: (itemId: number) => void
+}
+
+export function CartCard({
+  id,
+  imgUrl,
+  title,
+  amount,
+  price,
+  onClickMinus,
+  onClickPlus,
+  onClickRemove,
+}: CartCardProps) {
   return (
     <CartCardWrapper>
       <CartCardContent>
-        <img src={americano} alt="" />
+        <img src={imgUrl} alt="" />
         <CartCardMain>
-          <span>Expresso Tradicional</span>
+          <span>{title}</span>
           <CartCardMainActions>
-            <AmountCounter />
-            <button>
+            <AmountCounter
+              value={amount}
+              onClickMinus={() => onClickMinus(id)}
+              onClickPlus={() => onClickPlus(id)}
+            />
+            <button type="button" onClick={() => onClickRemove(id)}>
               <Trash size={16} />
               <span>REMOVER</span>
             </button>
           </CartCardMainActions>
         </CartCardMain>
       </CartCardContent>
-      <span>R$ 9,90</span>
+      <span>{formatBRLCurrency(price)}</span>
     </CartCardWrapper>
   )
 }

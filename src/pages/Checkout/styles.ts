@@ -76,8 +76,16 @@ export const ItemsContainer = styled.div`
   gap: 1.5rem;
   background: ${(props) => props.theme['gray-100']};
 
+  & > span {
+    text-align: center;
+  }
+
   & > hr {
     border: 1px solid ${(props) => props.theme['gray-300']};
+  }
+
+  & > div.cart-card > hr {
+    margin-top: 1.5rem;
   }
 
   & > button {

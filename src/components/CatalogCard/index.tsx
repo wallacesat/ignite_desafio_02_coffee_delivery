@@ -13,22 +13,20 @@ import {
 } from './styles'
 import { AmountCounter } from '../AmountCounter'
 
-interface CatalogCardProps {
-  id: number
-  title: string
-  description: string
-  price: number
-  tags: string[]
-  imgUrl: string
+import { CartItem } from '../../reducers/checkout/reducers'
+
+interface CatalogCardProps extends Omit<CartItem, 'amount'> {
+  onClickOrderButton: (itemOrder: CartItem) => void
 }
 
 export function CatalogCard({
   id,
+  imgUrl,
   title,
   description,
-  price,
   tags,
-  imgUrl,
+  price,
+  onClickOrderButton,
 }: CatalogCardProps) {
   const [amount, setAmount] = React.useState(1)
 
@@ -46,6 +44,19 @@ export function CatalogCard({
 
   function handleIncrementAmount() {
     setAmount((state) => state + 1)
+  }
+
+  function handleClickOrderButton() {
+    onClickOrderButton({
+      id,
+      imgUrl,
+      title,
+      description,
+      tags,
+      price,
+      amount,
+    })
+    setAmount(1)
   }
 
   return (
@@ -73,7 +84,7 @@ export function CatalogCard({
             onClickMinus={handleDecrementAmount}
             onClickPlus={handleIncrementAmount}
           />
-          <AddCartButton>
+          <AddCartButton onClick={handleClickOrderButton}>
             <ShoppingCartSimple size={22} weight="fill" />
           </AddCartButton>
         </CartActions>

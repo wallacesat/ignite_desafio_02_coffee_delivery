@@ -1,11 +1,11 @@
 import { Bank, CreditCard, Money } from 'phosphor-react'
 
+import { PaymentMethod } from '../../../reducers/checkout/reducers'
+
 import { PaymentSelectWrapper } from './styles'
 
-export type PaymentSelectVariant = 'credit' | 'debit' | 'money'
-
 interface PaymentSelectProps {
-  variant: PaymentSelectVariant
+  variant: PaymentMethod
   isSelected?: boolean
   onSelect: () => void
 }

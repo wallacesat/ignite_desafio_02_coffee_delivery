@@ -3,7 +3,12 @@ import * as React from 'react'
 import { CartCard } from '../../components/CartCard'
 import { Input } from '../../components/Input'
 
-import { PaymentSelect, PaymentSelectVariant } from './PaymentSelect'
+import { CheckoutContext } from '../../contexts/CheckoutContext'
+import { PaymentMethod } from '../../reducers/checkout/reducers'
+
+import { formatBRLCurrency } from '../../utils/formatters'
+
+import { PaymentSelect } from './PaymentSelect'
 import { SectionHeader } from './SectionHeader'
 
 import {
@@ -22,24 +27,39 @@ import {
 } from './styles'
 
 export function Checkout() {
-  const [paymentSelectedMethod, setPaymentSelectedMethod] =
-    React.useState<PaymentSelectVariant | null>(null)
+  const {
+    paymentMethod,
+    cart: { items: cartItems, totalItems, totalPrice, deliveryPrice },
+    incrementCartItem,
+    decrementCartItem,
+    removeCartItem,
+  } = React.useContext(CheckoutContext)
 
-  function handleSelectPaymentMethod(
-    paymentMethod: PaymentSelectVariant | null,
-  ) {
-    console.log(paymentMethod)
+  const [paymentSelectedMethod, setPaymentSelectedMethod] =
+    React.useState<PaymentMethod | null>(null)
+
+  React.useEffect(() => {
+    if (paymentMethod) {
+      setPaymentSelectedMethod(paymentMethod)
+    }
+  }, [paymentMethod])
+
+  function handleSelectPaymentMethod(paymentMethodType: PaymentMethod | null) {
     setPaymentSelectedMethod((state) => {
-      if (state === paymentMethod) {
+      if (state === paymentMethodType) {
         return null
       }
 
-      return paymentMethod
+      return paymentMethodType
     })
   }
 
+  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault()
+  }
+
   return (
-    <CheckoutWrapper>
+    <CheckoutWrapper onSubmit={handleSubmit} action="">
       <AddressAndPaymentContainer>
         <ContainerTitle>Complete seu pedido</ContainerTitle>
         <AddressContainer>
@@ -65,16 +85,14 @@ export function Checkout() {
             icon="currency-dollar"
           />
           <PaymentSelectContainer>
-            {['credit', 'debit', 'money'].map((paymentMethod) => (
+            {['credit', 'debit', 'money'].map((paymentMethodType) => (
               <PaymentSelect
-                key={paymentMethod}
-                variant={paymentMethod as PaymentSelectVariant}
+                key={paymentMethodType}
+                variant={paymentMethodType as PaymentMethod}
                 onSelect={() =>
-                  handleSelectPaymentMethod(
-                    paymentMethod as PaymentSelectVariant,
-                  )
+                  handleSelectPaymentMethod(paymentMethodType as PaymentMethod)
                 }
-                isSelected={paymentMethod === paymentSelectedMethod}
+                isSelected={paymentMethodType === paymentSelectedMethod}
               />
             ))}
           </PaymentSelectContainer>
@@ -83,25 +101,44 @@ export function Checkout() {
       <CartItemsContainer>
         <ContainerTitle>Cafés selecionados</ContainerTitle>
         <ItemsContainer>
-          <CartCard />
-          <hr />
-          <CartCard />
-          <hr />
+          {!totalItems ? (
+            <>
+              <span>Nenhum item foi adicionado ao carrinho</span>
+              <hr />
+            </>
+          ) : (
+            cartItems.map((item) => (
+              <div className="cart-card" key={item.id}>
+                <CartCard
+                  id={item.id}
+                  imgUrl={item.imgUrl}
+                  amount={item.amount}
+                  price={item.price * item.amount}
+                  title={item.title}
+                  onClickMinus={item.amount > 1 ? decrementCartItem : () => {}}
+                  onClickPlus={incrementCartItem}
+                  onClickRemove={removeCartItem}
+                />
+                <hr />
+              </div>
+            ))
+          )}
+
           <PurchaseSummary>
             <PurchaseSummaryDescription>
               <span>Total de itens</span>
-              <span>R$ 29,70</span>
+              <span>{formatBRLCurrency(totalPrice)}</span>
             </PurchaseSummaryDescription>
             <PurchaseSummaryDescription>
               <span>Entrega</span>
-              <span>R$ 3,50</span>
+              <span>{formatBRLCurrency(deliveryPrice)}</span>
             </PurchaseSummaryDescription>
             <PurchaseSummaryTotal>
               <span>Total</span>
-              <span>R$ 33,20</span>
+              <span>{formatBRLCurrency(totalPrice + deliveryPrice)}</span>
             </PurchaseSummaryTotal>
           </PurchaseSummary>
-          <button>COnfirmar pedido</button>
+          <button type="submit">Confirmar pedido</button>
         </ItemsContainer>
       </CartItemsContainer>
     </CheckoutWrapper>

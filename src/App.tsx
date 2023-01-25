@@ -1,5 +1,6 @@
 import { BrowserRouter } from 'react-router-dom'
 import { ThemeProvider } from 'styled-components'
+import { CheckoutContextProvider } from './contexts/CheckoutContext'
 
 import { Router } from './Router'
 
@@ -10,7 +11,9 @@ export function App() {
   return (
     <ThemeProvider theme={defaultTheme}>
       <BrowserRouter>
-        <Router />
+        <CheckoutContextProvider>
+          <Router />
+        </CheckoutContextProvider>
       </BrowserRouter>
 
       <GlobalStyle />
