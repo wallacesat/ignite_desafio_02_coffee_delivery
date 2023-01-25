@@ -1,8 +1,6 @@
 import * as React from 'react'
 import { ShoppingCartSimple } from 'phosphor-react'
 
-import { AmountCounter } from '../../../components/AmountCounter'
-
 import {
   AddCartButton,
   CardFooter,
@@ -13,8 +11,9 @@ import {
   TagsContainer,
   Value,
 } from './styles'
+import { AmountCounter } from '../AmountCounter'
 
-interface CoffeeCardProps {
+interface CatalogCardProps {
   id: number
   title: string
   description: string
@@ -23,14 +22,14 @@ interface CoffeeCardProps {
   imgUrl: string
 }
 
-export function CoffeeCard({
+export function CatalogCard({
   id,
   title,
   description,
   price,
   tags,
   imgUrl,
-}: CoffeeCardProps) {
+}: CatalogCardProps) {
   const [amount, setAmount] = React.useState(1)
 
   const calculatedPrice = amount < 2 ? price : amount * price
