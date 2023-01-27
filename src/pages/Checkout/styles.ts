@@ -113,8 +113,13 @@ export const ItemsContainer = styled.div`
     border: none;
     cursor: pointer;
 
-    &:hover {
+    &:hover:not(:disabled) {
       background: ${(props) => props.theme['yellow-700']};
+    }
+
+    &:disabled {
+      filter: grayscale(70%);
+      cursor: not-allowed;
     }
   }
 `

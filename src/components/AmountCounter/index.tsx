@@ -15,11 +15,11 @@ export function AmountCounter({
 }: AmountCounterProps) {
   return (
     <AmountCounterWrapper>
-      <AmountButton onClick={onClickMinus}>
+      <AmountButton type="button" onClick={onClickMinus}>
         <Minus size={14} weight="bold" />
       </AmountButton>
       <span>{value}</span>
-      <AmountButton onClick={onClickPlus}>
+      <AmountButton type="button" onClick={onClickPlus}>
         <Plus size={14} weight="bold" />
       </AmountButton>
     </AmountCounterWrapper>

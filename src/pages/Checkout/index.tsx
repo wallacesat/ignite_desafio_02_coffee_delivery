@@ -276,7 +276,9 @@ export function Checkout() {
               <span>{formatBRLCurrency(totalPrice + deliveryPrice)}</span>
             </PurchaseSummaryTotal>
           </PurchaseSummary>
-          <button type="submit">Confirmar pedido</button>
+          <button type="submit" disabled={!totalItems}>
+            Confirmar pedido
+          </button>
         </ItemsContainer>
       </CartItemsContainer>
     </CheckoutWrapper>
