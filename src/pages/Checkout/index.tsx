@@ -1,4 +1,5 @@
 import * as React from 'react'
+import { toast } from 'react-toastify'
 import { useNavigate } from 'react-router-dom'
 import { FormProvider, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -159,6 +160,17 @@ export function Checkout() {
     redirect('/success')
   }
 
+  function handleRemoveItemFromCart(itemId: number, itemTitle: string) {
+    removeCartItem(itemId)
+
+    toast.info(
+      <span>
+        {`O pedido`} <strong>{` ${itemTitle}`}</strong>
+        {` foi removido do carrinho`}
+      </span>,
+    )
+  }
+
   const { errors } = formState
 
   return (
@@ -255,7 +267,7 @@ export function Checkout() {
                   title={item.title}
                   onClickMinus={item.amount > 1 ? decrementCartItem : () => {}}
                   onClickPlus={incrementCartItem}
-                  onClickRemove={removeCartItem}
+                  onClickRemove={handleRemoveItemFromCart}
                 />
                 <hr />
               </div>

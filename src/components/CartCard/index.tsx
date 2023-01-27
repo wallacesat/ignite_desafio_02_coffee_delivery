@@ -19,7 +19,7 @@ interface CartCardProps {
   price: number
   onClickMinus: (itemId: number) => void
   onClickPlus: (itemId: number) => void
-  onClickRemove: (itemId: number) => void
+  onClickRemove: (itemId: number, itemTitle: string) => void
 }
 
 export function CartCard({
@@ -44,7 +44,7 @@ export function CartCard({
               onClickMinus={() => onClickMinus(id)}
               onClickPlus={() => onClickPlus(id)}
             />
-            <button type="button" onClick={() => onClickRemove(id)}>
+            <button type="button" onClick={() => onClickRemove(id, title)}>
               <Trash size={16} />
               <span>REMOVER</span>
             </button>

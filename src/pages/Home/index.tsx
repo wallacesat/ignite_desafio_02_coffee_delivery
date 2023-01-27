@@ -1,4 +1,5 @@
 import * as React from 'react'
+import { toast } from 'react-toastify'
 
 import { CatalogCard } from '../../components/CatalogCard'
 import { CheckoutContext } from '../../contexts/CheckoutContext'
@@ -11,6 +12,19 @@ import { CardsContainer, HomeContainer, HomeMain } from './styles'
 export function Home() {
   const { catalog, addNewItemToCart } = React.useContext(CheckoutContext)
 
+  function handleAddNewItemToCart(item: CartItem) {
+    const { amount, title } = item
+
+    addNewItemToCart(item)
+
+    toast.success(
+      <span>
+        {`${amount}`} <strong>{` ${title}`}</strong>
+        {` adiconado${amount > 1 ? 's' : ''} ao carrinho`}
+      </span>,
+    )
+  }
+
   return (
     <HomeContainer>
       <HomeIntro />
@@ -21,7 +35,7 @@ export function Home() {
             <CatalogCard
               key={cartItem.id}
               {...cartItem}
-              onClickOrderButton={addNewItemToCart}
+              onClickOrderButton={handleAddNewItemToCart}
             />
           ))}
         </CardsContainer>
