@@ -1,4 +1,7 @@
+import * as React from 'react'
 import { CurrencyDollar, MapPin, Timer } from 'phosphor-react'
+
+import { CheckoutContext } from '../../contexts/CheckoutContext'
 
 import { DeliveryDescription } from './DeliveryDescription'
 
@@ -7,6 +10,14 @@ import delivery from '../../assets/delivery.svg'
 import { DeliveryDetails, SuccessMain, Wrapper } from './styles'
 
 export function Success() {
+  const { address, paymentMethod } = React.useContext(CheckoutContext)
+
+  const paymenteMethodParse = {
+    credit: 'Cartão de crédito',
+    debit: 'Cartão de débito',
+    money: 'Dinheiro',
+  }
+
   return (
     <Wrapper>
       <h1>Uhu! Pedido confirmado</h1>
@@ -14,14 +25,16 @@ export function Success() {
 
       <SuccessMain>
         <DeliveryDetails>
-          <DeliveryDescription
-            title="Entrega em"
-            titleComplement="Rua João Daniel Martinelli, 102"
-            icon={MapPin}
-            backgroundIconColor="purple"
-          >
-            Farrapos - Porto Alegre, RS
-          </DeliveryDescription>
+          {!!address && (
+            <DeliveryDescription
+              title="Entrega em"
+              titleComplement={`${address.street} ${address.number || ''}`}
+              icon={MapPin}
+              backgroundIconColor="purple"
+            >
+              {`${address.district} - ${address.city}, ${address.state}`}
+            </DeliveryDescription>
+          )}
           <DeliveryDescription
             title="Previsão de entrega"
             icon={Timer}
@@ -29,13 +42,15 @@ export function Success() {
           >
             20 min - 30 min
           </DeliveryDescription>
-          <DeliveryDescription
-            title="Pagamento na entrega"
-            icon={CurrencyDollar}
-            backgroundIconColor="yellow-dark"
-          >
-            Cartão de Crédito
-          </DeliveryDescription>
+          {!!paymentMethod && (
+            <DeliveryDescription
+              title="Pagamento na entrega"
+              icon={CurrencyDollar}
+              backgroundIconColor="yellow-dark"
+            >
+              {paymenteMethodParse[paymentMethod]}
+            </DeliveryDescription>
+          )}
         </DeliveryDetails>
         <img src={delivery} alt="" />
       </SuccessMain>

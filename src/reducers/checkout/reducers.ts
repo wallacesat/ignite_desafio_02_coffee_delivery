@@ -23,7 +23,7 @@ export type CartItem = {
 }
 
 export type Address = {
-  cep: number
+  cep: string
   street: string
   number: string
   complement?: string
@@ -100,6 +100,12 @@ export function checkoutReducer(state: CheckoutState, action: any) {
       })
     }
 
+    case ActionTypes.CLEAR_CART: {
+      return produce(state, (draft) => {
+        draft.cart = initialCheckoutState.cart
+      })
+    }
+
     case ActionTypes.INCREMENT_CART_ITEM: {
       const itemIdToIncrement = action.payload.itemId as number
 
@@ -136,6 +142,22 @@ export function checkoutReducer(state: CheckoutState, action: any) {
         draft.cart.items[itemIndexToDecrement].amount -= 1
         draft.cart.totalItems -= 1
         draft.cart.totalPrice -= draft.cart.items[itemIndexToDecrement].price
+      })
+    }
+
+    case ActionTypes.ADD_NEW_ADDRESS: {
+      const newAddress = action.payload.address as Address
+
+      return produce(state, (draft) => {
+        draft.address = newAddress
+      })
+    }
+
+    case ActionTypes.ADD_NEW_PAYMENT_METHOD: {
+      const newPaymentMethod = action.payload.paymentMehotd as PaymentMethod
+
+      return produce(state, (draft) => {
+        draft.paymentMethod = newPaymentMethod
       })
     }
 

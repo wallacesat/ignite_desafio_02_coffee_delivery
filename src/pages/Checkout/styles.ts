@@ -66,6 +66,17 @@ export const PaymentSelectContainer = styled.div`
   display: flex;
   gap: 0.75rem;
   margin-top: 2rem;
+
+  position: relative;
+
+  & > span {
+    position: absolute;
+    bottom: -1.5rem;
+    right: 0;
+
+    font-size: 0.75rem;
+    color: ${(props) => props.theme['red-600']};
+  }
 `
 
 export const ItemsContainer = styled.div`

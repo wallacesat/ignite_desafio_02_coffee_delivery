@@ -2,6 +2,9 @@ import * as React from 'react'
 
 import {
   addItemAction,
+  addNewAddressAction,
+  addNewPaymentMethodAction,
+  clearCartAction,
   decrementCartItemAction,
   incrementCartItemAction,
   removeItemAction,
@@ -25,6 +28,9 @@ interface CheckoutContextType {
   incrementCartItem: (itemId: number) => void
   decrementCartItem: (itemId: number) => void
   removeCartItem: (itemId: number) => void
+  addNewAddress: (address: Address) => void
+  addNewPaymentMethod: (paymentMethod: PaymentMethod) => void
+  clearCart: () => void
 }
 
 export const CheckoutContext = React.createContext({} as CheckoutContextType)
@@ -58,6 +64,22 @@ export function CheckoutContextProvider({
     dispatch(removeItemAction(itemId))
   }
 
+  function addNewAddress(address?: Address) {
+    if (address) {
+      dispatch(addNewAddressAction(address))
+    }
+  }
+
+  function addNewPaymentMethod(paymentMethod?: PaymentMethod) {
+    if (paymentMethod) {
+      dispatch(addNewPaymentMethodAction(paymentMethod))
+    }
+  }
+
+  function clearCart() {
+    dispatch(clearCartAction())
+  }
+
   return (
     <CheckoutContext.Provider
       value={{
@@ -69,6 +91,9 @@ export function CheckoutContextProvider({
         incrementCartItem,
         decrementCartItem,
         removeCartItem,
+        addNewAddress,
+        addNewPaymentMethod,
+        clearCart,
       }}
     >
       {children}
